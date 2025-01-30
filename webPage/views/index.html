@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Bird House Monitoring Webpage</title>
+    <!-- Bootswatch Morph CSS -->
+    <link rel="stylesheet" href="./bootstrap.css" />
+  </head>
+  <body style="background-color: #151414">
+    <nav class="navbar navbar-expand-lg bg-light" data-bs-theme="light">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">BirdHouse Monitoring</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarColor03"
+          aria-controls="navbarColor03"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarColor03">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link active" href="#"
+                >Home
+                <span class="visually-hidden">(current)</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="capturedImages.html">Captured images</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Statistics</a>
+            </li>
+          </ul>
+          <form class="d-flex">
+            <input
+              class="form-control me-sm-2"
+              type="search"
+              placeholder="Search"
+            />
+            <button class="btn btn-secondary my-2 my-sm-0" type="submit">
+              Search
+            </button>
+          </form>
+        </div>
+      </div>
+    </nav>
+    <div>
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Timestamp</th>
+            <th scope="col">Device</th>
+            <th scope="col">Location</th>
+            <th scope="col">Image Path</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+    <script>
+      // Fetch data from the server
+      fetch("/queryReadNichoir")
+        .then((response) => response.json()) // Parse the JSON response
+        .then((data) => {
+          let tableBody = document.getElementById("tableBody");
+
+          // Loop through each JSON object (row) and populate the table
+          data.forEach((row) => {
+            let tr = document.createElement("tr");
+
+            // Dynamically create table cells for each field
+            tr.innerHTML = `
+              <td>${row.timestamp}</td>
+              <td>${row.device}</td>
+              <td>${row.location}</td>
+              <td>${row.imagePath}</td>
+            `;
+
+            // Append the new row to the table body
+            tableBody.appendChild(tr);
+          });
+        })
+        .catch((error) => console.error("Error fetching data:", error));
+    </script>
+  </body>
+</html>
